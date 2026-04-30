@@ -20,7 +20,7 @@ body {
 .header h2 {
     font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 12px;
     background: #F1FD0D;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -29,6 +29,12 @@ body {
     -webkit-font-smoothing: antialiased;
     text-transform: uppercase;
     margin: 0;
+}
+
+.header-actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
 }
 
 .settings-icon {
@@ -144,4 +150,33 @@ textarea:focus {
 .status.success {
     background: #ABD8D8;
     color: #1A3638;
+}
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    margin-top: 20px;
+    border-top: 2px solid #D7DBD8;
+    font-size: 11px;
+    color: #1A3638;
+    gap: 6px;
+    background: #F0F3F1;
+    border-radius: 0 0 6px 6px;
+}
+
+.footer a {
+    color: #1A3638;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: #ABD8D8;
+    text-decoration: underline;
+}
+
+.footer-logo {
+    width: 16px;
+    height: 16px;
+    opacity: 0.8;
 }

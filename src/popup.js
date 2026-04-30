@@ -26,11 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.runtime.openOptionsPage();
     });
 
-    // Bouton Remplir le formulaire
-    document.getElementById('fillBtn').addEventListener('click', () => {
+    // Fonction commune pour envoyer le remplissage
+    function triggerFill() {
         chrome.storage.sync.get(['firstName', 'lastName', 'email', 'phone', 'subject', 'message'], (data) => {
             const additionalMessage = document.getElementById('message').value;
-
             const formData = {
                 firstName: data.firstName || '',
                 lastName: data.lastName || '',
@@ -39,14 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 subject: data.subject || '',
                 message: additionalMessage || data.message || ''
             };
-
-            // Envoyer au content script
             chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
                 if (tabs[0]) {
-                    chrome.tabs.sendMessage(tabs[0].id, {
-                        action: 'fillForm',
-                        data: formData
-                    }, (response) => {
+                    chrome.tabs.sendMessage(tabs[0].id, { action: 'fillForm', data: formData }, (response) => {
                         if (chrome.runtime.lastError) {
                             showStatus('Erreur: La page n\'a pas répondu', 'error');
                         } else if (response && response.success) {
@@ -56,7 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
-    });
+    }
+
+    document.getElementById('quickFillBtn').addEventListener('click', triggerFill);
+    document.getElementById('fillBtn').addEventListener('click', triggerFill);
 });
 
 function showStatus(message, type) {
