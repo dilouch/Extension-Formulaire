@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="header">
+        <h2>Autofill Messages</h2>
+        <button class="settings-icon" id="settingsBtn" title="Paramètres">⚙️</button>
+    </div>
+
+    <div id="infoBox" class="info-box">
+        <div class="no-info">Configure d'abord tes informations dans les paramètres</div>
+    </div>
+
+    <textarea id="message" placeholder="Message supplémentaire (optionnel)..."></textarea>
+    <div class="button-group">
+        <button id="fillBtn">Remplir le formulaire</button>
+    </div>
+
+    <div class="status" id="status"></div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
+
+

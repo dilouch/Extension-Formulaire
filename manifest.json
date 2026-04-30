@@ -1,0 +1,36 @@
+{
+    "manifest_version": 3,
+    "name": "Autofill Messages",
+    "version": "1.0",
+    "description": "Remplit automatiquement les formulaires avec vos informations",
+
+    "permissions": [
+        "activeTab",
+        "scripting",
+        "storage"
+    ],
+    "host_permissions": [
+        "http://*/*",
+        "https://*/*"
+    ],
+    "action": {
+        "default_popup": "src/popup.html",
+        "default_icon": {
+            "16": "icons/logo-popup.png",
+            "32": "icons/logo-popup.png",
+            "48": "icons/logo-popup.png",
+            "128": "icons/logo-popup.png"
+        }
+    },
+    "background": {
+        "service_worker": "src/background.js"
+    },
+    "options_page": "src/options.html",
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["src/content_script.js"],
+            "run_at": "document_end"
+        }
+    ]
+}
