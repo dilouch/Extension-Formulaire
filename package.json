@@ -1,0 +1,52 @@
+{
+  "name": "extension-formulaire",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "docs": "jsdoc -c jsdoc.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dilouch/Extension-Formulaire.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/dilouch/Extension-Formulaire/issues"
+  },
+  "homepage": "https://github.com/dilouch/Extension-Formulaire#readme",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.4.1",
+    "jsdoc": "^4.0.5"
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "argparse": "^2.0.1",
+    "bluebird": "^3.7.2",
+    "catharsis": "^0.9.0",
+    "entities": "^4.5.0",
+    "escape-string-regexp": "^2.0.0",
+    "graceful-fs": "^4.2.11",
+    "js2xmlparser": "^4.0.2",
+    "klaw": "^3.0.0",
+    "linkify-it": "^5.0.1",
+    "lodash": "^4.18.1",
+    "markdown-it": "^14.2.0",
+    "markdown-it-anchor": "^8.6.7",
+    "marked": "^4.3.0",
+    "mdurl": "^2.0.0",
+    "mkdirp": "^1.0.4",
+    "punycode.js": "^2.3.1",
+    "requizzle": "^0.2.4",
+    "strip-json-comments": "^3.1.1",
+    "uc.micro": "^2.1.0",
+    "underscore": "^1.13.8",
+    "xmlcreate": "^2.0.4"
+  }
+}

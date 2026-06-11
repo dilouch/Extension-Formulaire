@@ -1,5 +1,11 @@
+/**
+ * @fileoverview Script du popup de l'extension.
+ * Affiche un résumé des informations sauvegardées et permet de
+ * déclencher le remplissage du formulaire sur la page active.
+ * @module popup
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Charger et afficher les informations sauvegardées
     chrome.storage.sync.get(['firstName', 'lastName', 'email', 'phone', 'subject', 'message'], (data) => {
         const infoBox = document.getElementById('infoBox');
 
@@ -11,62 +17,73 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (data.email) html += `<div class="info-item"><span class="info-label">Email:</span> ${escapeHtml(data.email)}</div>`;
             if (data.phone) html += `<div class="info-item"><span class="info-label">Tél:</span> ${escapeHtml(data.phone)}</div>`;
-
             infoBox.innerHTML = html;
         }
 
-        // Charger le message par défaut
         if (data.message) {
             document.getElementById('message').value = data.message;
         }
     });
 
-    // Bouton paramètres
     document.getElementById('settingsBtn').addEventListener('click', () => {
         chrome.runtime.openOptionsPage();
     });
-
-    // Fonction commune pour envoyer le remplissage
-    function triggerFill() {
-        chrome.storage.sync.get(['firstName', 'lastName', 'email', 'phone', 'subject', 'message'], (data) => {
-            const additionalMessage = document.getElementById('message').value;
-            const formData = {
-                firstName: data.firstName || '',
-                lastName: data.lastName || '',
-                email: data.email || '',
-                phone: data.phone || '',
-                subject: data.subject || '',
-                message: additionalMessage || data.message || ''
-            };
-            chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-                if (tabs[0]) {
-                    chrome.tabs.sendMessage(tabs[0].id, { action: 'fillForm', data: formData }, (response) => {
-                        if (chrome.runtime.lastError) {
-                            showStatus('Erreur: La page n\'a pas répondu', 'error');
-                        } else if (response && response.success) {
-                            showStatus('✓ Formulaire rempli !', 'success');
-                        }
-                    });
-                }
-            });
-        });
-    }
 
     document.getElementById('quickFillBtn').addEventListener('click', triggerFill);
     document.getElementById('fillBtn').addEventListener('click', triggerFill);
 });
 
+/**
+ * Récupère les données sauvegardées et envoie un message `fillForm`
+ * au content script de l'onglet actif.
+ * Appelée par le bouton principal et le bouton rapide du header.
+ */
+function triggerFill() {
+    chrome.storage.sync.get(['firstName', 'lastName', 'email', 'phone', 'subject', 'message'], (data) => {
+        const additionalMessage = document.getElementById('message').value;
+        const formData = {
+            firstName: data.firstName || '',
+            lastName: data.lastName || '',
+            email: data.email || '',
+            phone: data.phone || '',
+            subject: data.subject || '',
+            message: additionalMessage || data.message || ''
+        };
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            if (tabs[0]) {
+                chrome.tabs.sendMessage(tabs[0].id, { action: 'fillForm', data: formData }, (response) => {
+                    if (chrome.runtime.lastError) {
+                        showStatus('Erreur: La page n\'a pas répondu', 'error');
+                    } else if (response && response.success) {
+                        showStatus('✓ Formulaire rempli !', 'success');
+                    }
+                });
+            }
+        });
+    });
+}
+
+/**
+ * Affiche un message de statut temporaire dans le popup.
+ *
+ * @param {string} message - Texte à afficher
+ * @param {'success'|'error'} type - Type de message (détermine le style CSS)
+ */
 function showStatus(message, type) {
     const statusEl = document.getElementById('status');
     statusEl.textContent = message;
     statusEl.className = `status ${type}`;
     statusEl.style.display = 'block';
-
-    setTimeout(() => {
-        statusEl.style.display = 'none';
-    }, 3000);
+    setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
 }
 
+/**
+ * Échappe les caractères HTML pour éviter les injections XSS
+ * lors de l'affichage des données utilisateur dans le popup.
+ *
+ * @param {string} text - Texte brut à échapper
+ * @returns {string} Texte échappé sûr pour innerHTML
+ */
 function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
